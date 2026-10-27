@@ -1,0 +1,16 @@
+{
+  "name": "social-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mock Rockstar Social Hub API for the GTA 6 DevOps Academy 'Surviving Launch Day' session.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

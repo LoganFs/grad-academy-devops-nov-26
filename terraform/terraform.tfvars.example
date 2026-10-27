@@ -1,0 +1,14 @@
+# Copy this file to terraform.tfvars and tweak as needed:
+#     cp terraform.tfvars.example terraform.tfvars
+#
+# terraform.tfvars is gitignored (it can hold machine-specific paths).
+
+location            = "uksouth"
+ssh_public_key_path = "~/.ssh/id_rsa.pub"
+
+# vm_size must have >= 2 vCPUs for the Mission 3 container HA demo to help.
+# vm_size = "Standard_B2s"
+
+# The single VM runs Docker. Missions switch containers on that same box:
+#   Mission 1 (vanilla):  one app container  -> `make deploy`
+#   Mission 3 (armor up): nginx + 2 app containers -> `make armor`

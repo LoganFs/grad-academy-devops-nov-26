@@ -1,0 +1,13 @@
+# MISSION 1 — Vanilla: a single Social Hub container owns port 80.
+# One Node process == one CPU-bound bottleneck. This is what melts in Mission 2.
+name: social-hub
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social-hub:latest
+    ports:
+      - "80:80"
+    restart: unless-stopped

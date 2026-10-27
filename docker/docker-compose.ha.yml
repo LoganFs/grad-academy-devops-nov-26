@@ -1,0 +1,37 @@
+# MISSION 3 — Armor Up (Single-VM Container HA).
+# An Nginx container owns port 80 and load-balances across TWO Social Hub app
+# containers. On a 2-vCPU VM the two Node processes use both cores, so the pool
+# serves ~2x the traffic of the single vanilla container.
+#
+#   Internet -> :80 nginx -> app1 (:5001) / app2 (:5002)
+#
+# app1/app2 also publish to 127.0.0.1:5001 / :5002 so you can curl a single
+# instance from inside the VM (matches the Mission 3 diagram).
+name: social-hub
+
+services:
+  app1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: social-hub:latest
+    ports:
+      - "127.0.0.1:5001:80"
+    restart: unless-stopped
+
+  app2:
+    image: social-hub:latest
+    ports:
+      - "127.0.0.1:5002:80"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app1
+      - app2
+    restart: unless-stopped

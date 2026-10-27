@@ -1,0 +1,42 @@
+#cloud-config
+# Rendered by Terraform (templatefile). The app source and the docker/ files
+# are injected from the repo so they stay the single source of truth.
+# Everything lands flat in /opt/social-hub, which is the Docker build context.
+
+write_files:
+  - path: /opt/social-hub/server.js
+    permissions: '0644'
+    content: |
+      ${indent(6, server_js)}
+
+  - path: /opt/social-hub/package.json
+    permissions: '0644'
+    content: |
+      ${indent(6, package_json)}
+
+  - path: /opt/social-hub/Dockerfile
+    permissions: '0644'
+    content: |
+      ${indent(6, dockerfile)}
+
+  - path: /opt/social-hub/docker-compose.yml
+    permissions: '0644'
+    content: |
+      ${indent(6, compose_vanilla)}
+
+  - path: /opt/social-hub/docker-compose.ha.yml
+    permissions: '0644'
+    content: |
+      ${indent(6, compose_ha)}
+
+  - path: /opt/social-hub/nginx.conf
+    permissions: '0644'
+    content: |
+      ${indent(6, nginx_conf)}
+
+runcmd:
+  # Install Docker Engine + the compose plugin.
+  - curl -fsSL https://get.docker.com | sh
+  - usermod -aG docker ${admin_username}
+  # Mission 1: bring up the single vanilla container on port 80.
+  - cd /opt/social-hub && docker compose up -d --build
